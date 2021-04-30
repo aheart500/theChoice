@@ -11,12 +11,16 @@ import Select from "@material-ui/core/Select";
 import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import firebase from "firebase/app";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
 const useStyle = makeStyles(() => ({
-  title: {
-    margin: "1rem 0",
+  dialogPaper: {
+    width: "70%",
+    maxWidth: "70%",
   },
   root: {
     display: "flex",
+    padding: 20,
   },
   fileUpload: {
     display: "flex",
@@ -38,7 +42,7 @@ const useStyle = makeStyles(() => ({
   formFields: {
     display: "flex",
     flexDirection: "column",
-    width: "20%",
+    width: "25%",
   },
   correctAnswer: {
     height: "3rem",
@@ -48,11 +52,12 @@ const useStyle = makeStyles(() => ({
     marginTop: "2rem",
   },
 }));
-const AddQuestion = ({ addQuestion }) => {
+const AddQuestion = ({ addQuestion, open, onClose }) => {
   const classes = useStyle();
   const [uploadedFile, setUploadedFile] = useState(null);
   const [questionType, setQuestionType] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("");
+  const [uploading, setUploading] = useState(false);
   const fileRef = useRef(null);
   const handleFileUpload = (e) => {
     if (e.target.files) {
@@ -71,6 +76,7 @@ const AddQuestion = ({ addQuestion }) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!isValid) return;
+    setUploading(true);
     const storageRef = firebase
       .storage()
       .ref()
@@ -78,20 +84,22 @@ const AddQuestion = ({ addQuestion }) => {
     storageRef
       .put(uploadedFile)
       .then((snapshot) => {
-        console.log("uploaded");
         snapshot.ref.getDownloadURL().then((url) => {
           addQuestion({ image: url, questionType, correctAnswer });
           setUploadedFile(null);
           setQuestionType("");
           setCorrectAnswer("");
           fileRef.current.value = "";
+          setUploading(false);
+          onClose();
         });
       })
       .catch((err) => console.log(err));
   };
   return (
-    <div>
-      <h1 className={classes.title}>New Question</h1>
+    <Dialog onClose={onClose} open={open} PaperProps={{ className: classes.dialogPaper }}>
+      <DialogTitle>Add Question</DialogTitle>
+
       <form className={classes.root} onSubmit={handleFormSubmit}>
         <div className={classes.fileUpload}>
           <input ref={fileRef} type="file" id="file" accept="image/*" onChange={handleFileUpload} />
@@ -136,16 +144,16 @@ const AddQuestion = ({ addQuestion }) => {
           </div>
           <Button
             className={classes.button}
-            disabled={!isValid}
+            disabled={!isValid || uploading}
             color="primary"
             type="submit"
             variant="contained"
           >
-            Add Question
+            {uploading ? "Saving..." : "Add Question"}
           </Button>
         </div>
       </form>
-    </div>
+    </Dialog>
   );
 };
 

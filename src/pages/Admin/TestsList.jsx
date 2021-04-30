@@ -21,7 +21,7 @@ const TestsList = () => {
         console.log(e);
       });
   }, []);
-  console.log(tests);
+
   return (
     <div>
       <h1>Tests</h1>

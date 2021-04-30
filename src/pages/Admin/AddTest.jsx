@@ -41,7 +41,7 @@ const AddTest = ({ addTest }) => {
       firebase
         .firestore()
         .collection("tests")
-        .add({ ...values, created: firebase.firestore.FieldValue.serverTimestamp() })
+        .add({ ...values, questions: [], created: firebase.firestore.FieldValue.serverTimestamp() })
         .then((response) => {
           addTest({ ...values, id: response.id });
         });

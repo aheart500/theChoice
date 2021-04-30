@@ -21,8 +21,8 @@ const Admin = () => {
       <Header />
       <main className={classes.main}>
         <Router>
+          <Route exact path="/admin/test/:id" component={Test} />
           <Route exact path="/admin" component={TestsList} />
-          <Route path="/admin/test/:id" component={Test} />
         </Router>
       </main>
     </div>
