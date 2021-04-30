@@ -1,0 +1,52 @@
+{
+  "name": "thechoice",
+  "version": "0.1.0",
+  "homepage": "https://dryehia.com",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.7.0",
+    "@u-wave/react-youtube": "^0.7.2",
+    "firebase": "^8.2.10",
+    "formik": "^2.2.6",
+    "material-testimonial-card": "0.0.3",
+    "react": "^17.0.1",
+    "react-burger-menu": "^3.0.3",
+    "react-dom": "^17.0.1",
+    "react-dropdown": "^1.9.2",
+    "react-icons": "^4.2.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.2",
+    "react-slick": "^0.28.1",
+    "reactjs-popup": "^2.0.4",
+    "slick-carousel": "^1.8.1",
+    "web-vitals": "^1.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
