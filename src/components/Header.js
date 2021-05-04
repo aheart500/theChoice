@@ -4,7 +4,7 @@ import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import minilogo from "../images/mini-logo.png";
 import { Link } from "react-router-dom";
 
-export default function Header({ user, userProfile }) {
+export default function Header({ user }) {
   return (
     <header className="app-header">
       <Link to="./">
@@ -15,7 +15,7 @@ export default function Header({ user, userProfile }) {
           <FaPhoneAlt size="2em" />
         </a>
         {user ? (
-          <Link to="./myaccount" userProfile={userProfile} user={user}>
+          <Link to="./myaccount" user={user}>
             <a href="r" className="icon-buttons">
               <FaUser size="2em" />
             </a>

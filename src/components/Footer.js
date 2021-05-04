@@ -1,42 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 import logo from "../images/logo.png";
-import minilogo from "../images/mini-logo.png";
+
 import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer style={{ marginTop: "auto" }}>
       <div className="footer-left">
         <ul className="footer-menu">
           <li>
-            <a>
-              <b>Pages</b>
-            </a>
+            <b>Pages</b>
           </li>
           <li>
-            <a href="">Home</a>
+            <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="./myaccount">
-              <a href="">My Account</a>
-            </Link>
+            <Link to="./myaccount">My Account</Link>
           </li>
           <li>
-            <a href="">Practice</a>
+            <Link to="/">Practice</Link>
           </li>
           <li>
-            <a href="">Search</a>
+            <Link to="/">Search</Link>
           </li>
           <li>
-            <a href="">Contact</a>
+            <Link to="/">Contact</Link>
           </li>
         </ul>
         <ul className="footer-tests">
           <li>
-            <a>
-              <b>Tests</b>
-            </a>
+            <b>Tests</b>
           </li>
           <li>
             <a href="2">SAT</a>
@@ -60,16 +54,10 @@ export default function Footer() {
       </div>
       <div className="center">
         <div>
-          <a
-            href="https://www.facebook.com/TheChoiceSAT"
-            className="icon-buttons"
-          >
+          <a href="https://www.facebook.com/TheChoiceSAT" className="icon-buttons">
             <FaFacebook size="3em" />
           </a>
-          <a
-            href="https://www.instagram.com/thechoicesat/"
-            className="icon-buttons"
-          >
+          <a href="https://www.instagram.com/thechoicesat/" className="icon-buttons">
             <FaInstagram size="3em" />
           </a>
         </div>
@@ -79,7 +67,7 @@ export default function Footer() {
       </div>
       <div className="footer-right">
         <Link to="./">
-          <img src={logo} width="250px" />
+          <img src={logo} width="250px" alt="logo" />
         </Link>
       </div>
     </footer>

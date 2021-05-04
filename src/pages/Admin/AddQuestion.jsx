@@ -52,10 +52,11 @@ const useStyle = makeStyles(() => ({
     marginTop: "2rem",
   },
 }));
-const AddQuestion = ({ addQuestion, open, onClose }) => {
+const AddQuestion = ({ addQuestion, open, onClose, withSections }) => {
   const classes = useStyle();
   const [uploadedFile, setUploadedFile] = useState(null);
   const [questionType, setQuestionType] = useState("");
+  const [questionSection, setQuestionSection] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef(null);
@@ -72,7 +73,12 @@ const AddQuestion = ({ addQuestion, open, onClose }) => {
   const handleChangeAnswer = (e) => {
     setCorrectAnswer(e.target.value);
   };
-  const isValid = uploadedFile && questionType && correctAnswer;
+  const handleChangeQuestionSection = (e) => {
+    setQuestionSection(e.target.value);
+  };
+
+  const isValid =
+    uploadedFile && questionType && correctAnswer && (withSections ? questionSection !== "" : true);
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!isValid) return;
@@ -85,10 +91,11 @@ const AddQuestion = ({ addQuestion, open, onClose }) => {
       .put(uploadedFile)
       .then((snapshot) => {
         snapshot.ref.getDownloadURL().then((url) => {
-          addQuestion({ image: url, questionType, correctAnswer });
+          addQuestion({ image: url, type: questionType, correctAnswer, section: questionSection });
           setUploadedFile(null);
           setQuestionType("");
           setCorrectAnswer("");
+          setQuestionSection("");
           fileRef.current.value = "";
           setUploading(false);
           onClose();
@@ -112,6 +119,19 @@ const AddQuestion = ({ addQuestion, open, onClose }) => {
           )}
         </div>
         <div className={classes.formFields}>
+          {withSections && (
+            <FormControl className={classes.formControl}>
+              <InputLabel id="questionSection">Question Section</InputLabel>
+              <Select
+                labelId="questionSection"
+                value={questionSection}
+                onChange={handleChangeQuestionSection}
+              >
+                <MenuItem value={"1"}>1</MenuItem>
+                <MenuItem value={"2"}>2</MenuItem>
+              </Select>
+            </FormControl>
+          )}
           <FormControl className={classes.formControl}>
             <InputLabel id="questionType">Question Type</InputLabel>
             <Select labelId="questionType" value={questionType} onChange={handleChangeQuestionType}>

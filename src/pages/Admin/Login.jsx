@@ -62,8 +62,6 @@ const validate = (values) => {
   const errors = {};
   if (!values.username) {
     errors.username = "Required";
-  } else if (values.username.length > 20) {
-    errors.username = "Must be 20 characters or less";
   }
   if (!values.password) {
     errors.password = "Required";
@@ -74,7 +72,7 @@ const validate = (values) => {
 };
 const Login = () => {
   const {
-    userState: { isLoggedIn: isLogged },
+    userState: { isAdmin },
     Login: login,
   } = useContext(UserContext);
 
@@ -90,7 +88,7 @@ const Login = () => {
     },
   });
 
-  if (isLogged) return <Redirect to="/admin" />;
+  if (isAdmin) return <Redirect to="/admin" />;
   return (
     <>
       <Grid container wrap="wrap-reverse">

@@ -2,12 +2,12 @@ export default function userReducer(state, action) {
   switch (action.type) {
     case "LOGIN":
       return {
-        ...state,
         isLoggedIn: true,
+        ...action.payload,
       };
 
     case "LOGOUT":
-      return { ...state, isLoggedIn: false };
+      return { isLoggedIn: false };
     default:
       return state;
   }

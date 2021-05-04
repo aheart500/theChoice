@@ -1,32 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Header from "../components/Header";
-import Navigator from "../components/Navigator";
-import Footer from "../components/Footer";
-import firebase from "firebase/app";
-import { useHistory } from "react-router-dom";
-
-export default function MyAccount({ userProfile, user }) {
+import UserContext from "../Contexts/User/UserContext";
+export default function MyAccount() {
   const [profile, setProfile] = useState(true);
-  //const [userProfile, setUserProfile] = useState();
-  //const [user, setUser] = useState();
-  const [dataFetched, setDataFetched] = useState(false);
-  const history = useHistory();
-  /*
-  setUser(firebase.auth().currentUser);
-
-  if (user) {
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(user.uid)
-      .get((doc) => setUserProfile(doc))
-      .then(setDataFetched(true));
-  } else {
-    history.push({
-      pathname: "/signup",
-    });
-  }
-  */
+  const { userState: userProfile } = useContext(UserContext);
   return (
     <>
       <Header />
@@ -62,13 +39,13 @@ export default function MyAccount({ userProfile, user }) {
             <div className="personal-info">Personal Info</div>
             <div className="data-points">
               <h2>Name</h2>
-              <h3>{userProfile.name}</h3>
+              <h3>{userProfile?.name}</h3>
               <h2>Grade</h2>
-              <h3>{userProfile.grade}</h3>
+              <h3>{userProfile?.grade}</h3>
               <h2>Email</h2>
-              <h3>{user.email}</h3>
+              <h3>{userProfile?.email}</h3>
               <h2>Phone</h2>
-              <h3>{userProfile.phone}</h3>
+              <h3>{userProfile?.phone}</h3>
             </div>
             <div className="academic-info">Academic Info</div>
             <div className="data-points">

@@ -2,24 +2,26 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import AddQuestion from "./AddQuestion";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
 import { AddedQuestionNotif, RemovedQuestionNotif } from "./notifs";
-const width = "66.5%";
-const useStyle = makeStyles(() => ({
-  questionCard: {
-    margin: "1rem 0",
-  },
-  image: {
-    width,
-    height: "20rem",
-  },
-}));
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Question from "./Question";
+
+const TabPanel = (props) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div role="tabpanel" hidden={value !== index} {...other}>
+      {value === index && children}
+    </div>
+  );
+};
 
 const Test = ({ match: { params } }) => {
-  const classes = useStyle();
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [currentSection, setCurrentSection] = useState(0);
   const testRef = firebase.firestore().collection("tests").doc(params.id);
   useEffect(() => {
     testRef
@@ -50,13 +52,24 @@ const Test = ({ match: { params } }) => {
       .then(() => RemovedQuestionNotif())
       .catch((e) => console.log(e));
   };
+  const withSections = ["sat", "est"].includes(test.type);
+  const handleSectionChange = (event, newValue) => {
+    setCurrentSection(newValue);
+  };
+  const renderQuestions = (qs) => {
+    return qs.map((question, i) => {
+      return (
+        <Question key={i} i={i} question={question} handleRemoveQuestion={handleRemoveQuestion} />
+      );
+    });
+  };
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1>
-          {test.name} -- {test.duration} Minutes
+          {test.name} -- {test?.type?.toUpperCase()} Test
         </h1>
-        <p>{questions.length} Questions</p>
+        <p>{questions?.length} Questions</p>
         <Button variant="contained" color="primary" onClick={() => setDialogOpen(true)}>
           + Add question
         </Button>
@@ -65,27 +78,30 @@ const Test = ({ match: { params } }) => {
         addQuestion={handleAddQuestion}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        withSections={withSections}
       />
-      {questions.length
-        ? questions.map((question, i) => {
-            return (
-              <div key={i} className={classes.questionCard}>
-                <h2>Question {i + 1}</h2>
-                <img src={question.image} alt="questionImage" className={classes.image} />
-                <div style={{ display: "flex", justifyContent: "space-between", width }}>
-                  <h4>Answer is: {question.correctAnswer}</h4>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleRemoveQuestion(i)}
-                  >
-                    Delete Question
-                  </Button>
-                </div>
-              </div>
-            );
-          })
-        : "No questions added yet"}
+
+      {!withSections ? (
+        questions?.length ? (
+          renderQuestions(questions)
+        ) : (
+          "No questions added yet"
+        )
+      ) : (
+        <>
+          <Tabs value={currentSection} onChange={handleSectionChange}>
+            <Tab label="Section One" />
+            <Tab label="Section Two" />
+          </Tabs>
+
+          <TabPanel value={currentSection} index={0}>
+            {renderQuestions(questions.filter((quis) => quis.section === "1"))}
+          </TabPanel>
+          <TabPanel value={currentSection} index={1}>
+            {renderQuestions(questions.filter((quis) => quis.section === "2"))}
+          </TabPanel>
+        </>
+      )}
     </div>
   );
 };

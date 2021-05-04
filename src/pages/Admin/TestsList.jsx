@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import AddTest from "./AddTest";
 import { Link } from "react-router-dom";
 import firebase from "firebase/app";
+import Button from "@material-ui/core/Button";
 const TestsList = () => {
   const [tests, setTests] = useState([]);
-
+  const [dialogOpen, setDialogOpen] = useState(false);
   const getTests = async () => {
     const snapshot = await firebase.firestore().collection("tests").orderBy("created").get();
     return snapshot.docs.map((doc) => {
@@ -24,14 +25,23 @@ const TestsList = () => {
 
   return (
     <div>
-      <h1>Tests</h1>
-      <AddTest addTest={(data) => setTests([...tests, data])} />
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1>Tests</h1>
+        <Button variant="contained" color="primary" onClick={() => setDialogOpen(true)}>
+          + Add Test
+        </Button>
+      </div>
+      <AddTest
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        addTest={(data) => setTests([...tests, data])}
+      />
 
-      {tests.map(({ name, duration, id }) => {
+      {tests.map(({ name, type, id }) => {
         return (
           <div key={id}>
             <Link to={`/admin/test/${id}`}>
-              {name} -- {duration} minutes
+              {name} -- {type.toUpperCase()} Test
             </Link>
           </div>
         );

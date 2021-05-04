@@ -2,49 +2,59 @@ import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
 import React, { useReducer, useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader";
+import firebase from "firebase/app";
+import { generateUserDocument } from "../../services/user";
 export default function UserState({ children }) {
   const [loading, setLoading] = useState(true);
   const initialState = {
     isLoggedIn: false,
     isAdmin: false,
     name: "",
-    id: "",
+    uid: "",
   };
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   useEffect(() => {
-    let loggedUser = localStorage.getItem("loggedUser");
-    if (loggedUser) loggedUser = JSON.parse(loggedUser);
-    if (loggedUser) {
-      dispatch({
-        type: "LOGIN",
-        payload: loggedUser,
-      });
-    }
-    setLoading(false);
+    firebase.auth().onAuthStateChanged(async (userAuth) => {
+      const user = await generateUserDocument(userAuth);
+      if (user) {
+        dispatch({ type: "LOGIN", payload: user });
+      }
+      setLoading(false);
+    });
   }, []);
 
-  const Login = ({ username, password }) => {
-    if (username === "admin" && password === "20202020") {
-      const user = { name: "admin", id: 1 };
-      localStorage.setItem("loggedUser", JSON.stringify(user));
-      dispatch({ type: "LOGIN", payload: user });
-      return true;
+  const Login = async ({ username, password }) => {
+    if (username && password) {
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(username, password)
+        .catch((err) => console.log("error"));
     }
-    return false;
   };
-
+  const Register = async ({ username, password, ...additionalData }) => {
+    try {
+      const { user } = await firebase.auth().createUserWithEmailAndPassword(username, password);
+      await generateUserDocument(user, additionalData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const Logout = () => {
-    localStorage.clear();
-    dispatch({ type: "LOGOUT" });
+    firebase
+      .auth()
+      .signOut()
+      .then(() => dispatch({ type: "LOGOUT" }))
+      .catch((e) => console.log(e));
   };
-
+  console.log("user", state);
   return (
     <UserContext.Provider
       value={{
         userState: state,
         Login,
         Logout,
+        Register,
       }}
     >
       {loading ? <Loader /> : children}

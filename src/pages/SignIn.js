@@ -1,38 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import firebase from "firebase/app";
+
 import "firebase/firestore";
-import sat from "../images/sat.png";
-import act from "../images/ACT.png";
-import est from "../images/est.png";
-import ap from "../images/ap.jpg";
-import { useHistory } from "react-router-dom";
+import UserContext from "../Contexts/User/UserContext";
 
 export default function SignIn(props) {
-  const history = useHistory();
-  const test = props.history.location.test;
+  const { Login } = useContext(UserContext);
 
   const [studentEmail, setStudentEmail] = useState("");
   const [studentPassword, setStudentPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const onFormSubmit = (event) => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(studentEmail, studentPassword)
-      .then((userCredential) => {
-        // Signed in
-        var user = userCredential.user;
-        history.push({
-          pathname: "/",
-        });
-        // ...
+    event.preventDefault();
+    Login({ username: studentEmail, password: studentPassword })
+      .then(() => {
+        window.location.replace("/");
       })
-      .catch((error) => {
-        var errorCode = error.code;
-        setErrorMessage(error.message);
-      });
+      .catch((e) => console.log(e));
   };
 
   return (
@@ -61,12 +46,8 @@ export default function SignIn(props) {
               required
             />
           </label>
-          <h1>{errorMessage}</h1>
-          <input
-            type="submit"
-            value="Sign In"
-            style={{ textAlign: "center" }}
-          />
+
+          <input type="submit" value="Sign In" style={{ textAlign: "center" }} />
         </form>
       </div>
       <Footer />

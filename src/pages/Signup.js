@@ -1,95 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import firebase from "firebase/app";
+import UserContext from "../Contexts/User/UserContext";
 import "firebase/firestore";
-import sat from "../images/sat.png";
-import act from "../images/ACT.png";
-import est from "../images/est.png";
-import ap from "../images/ap.jpg";
-import { useHistory } from "react-router-dom";
 
-export default function Signup(props) {
-  const history = useHistory();
-  const test = props.history.location.test;
+import { Link } from "react-router-dom";
 
-  const [studentName, setStudentName] = useState("");
-  const [studentPhone, setStudentPhone] = useState();
-  const [studentGrade, setStudentGrade] = useState();
-  const [studentEmail, setStudentEmail] = useState("");
-  const [studentSat, setStudentSat] = useState();
-  const [studentAct, setStudentAct] = useState();
-  const [studentEst, setStudentEst] = useState();
-  const [studentPassword, setStudentPassword] = useState("");
-  const [studentConfirmPassword, setStudentConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+const Signup = (props) => {
+  const [name, setStudentName] = useState("");
+  const [phone, setStudentPhone] = useState();
+  const [grade, setStudentGrade] = useState();
+  const [email, setStudentEmail] = useState("");
+  const [sat, setStudentSat] = useState();
+  const [act, setStudentAct] = useState();
+  const [est, setStudentEst] = useState();
+  const [password, setStudentPassword] = useState("");
+  const [confirmPassword, setStudentConfirmPassword] = useState("");
+  const [groupCode, setGroupCode] = useState("");
 
-  const [user, setUser] = useState();
-  const [testa, setTesta] = useState("");
+  const { Register } = useContext(UserContext);
+
   const onFormSubmit = (event) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(studentEmail, studentPassword)
-      .then((userCredential) => {
-        // Signed in
-        setUser(userCredential.user);
-
-        // ...
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        setErrorMessage(error.message);
-        // ..
-      });
     event.preventDefault();
+    Register({ username: email, password, phone, name, grade, sat, act, est, groupCode })
+      .then(() => window.location.replace("/"))
+      .catch((e) => console.log(e));
   };
-  if (user) {
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(user.uid)
-      .set({
-        name: studentName,
-        phone: studentPhone,
-        grade: studentGrade,
-        sat: studentSat,
-        act: studentAct,
-        est: studentEst,
-      })
-      .then(
-        history.push({
-          pathname: "/",
-        })
-      );
-  }
-  const onForm = (event) => {
-    history.push({
-      pathname: "/test",
-      name: studentName,
-      phone: studentPhone,
-    });
-  };
-  const RedirecttoLogIn = (event) => {
-    history.push({
-      pathname: "/signin",
-    });
-  };
+
   return (
     <>
       <Header />
       <div className="signup-form">
-        <h1 style={{ marginTop: "100px" }}>
-          Fill in your information to create an account!
-        </h1>
+        <h1 style={{ marginTop: "100px" }}>Fill in your information to create an account!</h1>
         <h2 style={{ marginBottom: "0px" }}>Already have an account?</h2>
-        <a onClick={() => RedirecttoLogIn()}>Click here to log in</a>
+        <Link to="/signin">Click here to log in</Link>
         <form onSubmit={onFormSubmit}>
           <label>
             Name:
             <input
               type="text"
               name="name"
-              value={studentName}
+              value={name}
               onChange={(event) => setStudentName(event.target.value)}
               required
             />
@@ -99,7 +50,7 @@ export default function Signup(props) {
             <input
               type="phone"
               name="number"
-              value={studentPhone}
+              value={phone}
               onChange={(event) => setStudentPhone(event.target.value)}
               required
             />
@@ -109,7 +60,7 @@ export default function Signup(props) {
             <input
               type="number"
               name="grade"
-              value={studentGrade}
+              value={grade}
               onChange={(event) => setStudentGrade(event.target.value)}
               required
             />
@@ -119,7 +70,7 @@ export default function Signup(props) {
             <input
               type="email"
               name="email"
-              value={studentEmail}
+              value={email}
               onChange={(event) => setStudentEmail(event.target.value)}
               required
             />
@@ -129,7 +80,7 @@ export default function Signup(props) {
             <input
               type="number"
               name="satScore"
-              value={studentSat}
+              value={sat}
               onChange={(event) => setStudentSat(event.target.value)}
             />
           </label>
@@ -138,7 +89,7 @@ export default function Signup(props) {
             <input
               type="number"
               name="actScore"
-              value={studentAct}
+              value={act}
               onChange={(event) => setStudentAct(event.target.value)}
             />
           </label>
@@ -147,7 +98,7 @@ export default function Signup(props) {
             <input
               type="number"
               name="estScore"
-              value={studentEst}
+              value={est}
               onChange={(event) => setStudentEst(event.target.value)}
             />
           </label>
@@ -156,7 +107,7 @@ export default function Signup(props) {
             <input
               type="password"
               name="password"
-              value={studentPassword}
+              value={password}
               onChange={(event) => setStudentPassword(event.target.value)}
             />
           </label>
@@ -165,13 +116,18 @@ export default function Signup(props) {
             <input
               type="password"
               name="confirmpassword"
-              value={studentConfirmPassword}
-              onChange={(event) =>
-                setStudentConfirmPassword(event.target.value)
-              }
+              value={confirmPassword}
+              onChange={(event) => setStudentConfirmPassword(event.target.value)}
             />
           </label>
-          <h2>{errorMessage}</h2>
+          <label>
+            Group Code:
+            <input
+              name="code"
+              value={groupCode}
+              onChange={(event) => setGroupCode(event.target.value)}
+            />
+          </label>
 
           <input type="submit" value="Create Account" />
         </form>
@@ -179,4 +135,5 @@ export default function Signup(props) {
       <Footer />
     </>
   );
-}
+};
+export default Signup;
