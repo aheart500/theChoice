@@ -25,7 +25,7 @@ export default function Header({ user }) {
         )}
 
         <Menu right>
-          <Link to="./" className="icon-buttons">
+          <Link to="./" className="menu-item">
             Home
           </Link>
 
