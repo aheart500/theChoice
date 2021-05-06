@@ -10,9 +10,10 @@ const useStyle = makeStyles({
   root: {
     backgroundColor: "#353577",
     width: "100%",
-    height: "5rem",
+    minHeight: "5rem",
     display: "flex",
     alignItems: "center",
+    flexWrap: "wrap",
   },
   navigationButtons: {
     marginLeft: "5rem",

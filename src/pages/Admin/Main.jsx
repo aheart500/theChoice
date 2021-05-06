@@ -22,7 +22,7 @@ const Main = () => {
   }, []);
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
       <TestsList />
       <div>
         <h1>Students</h1>

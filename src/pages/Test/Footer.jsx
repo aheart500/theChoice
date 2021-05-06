@@ -10,11 +10,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "auto",
     width: "100%",
-    height: "5rem",
+    minHeight: "5rem",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: "0 5rem",
+    padding: "0 1rem",
     backgroundColor: "#353577",
   },
   paginationItem: {
@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     margin: "0 0.1rem",
     border: "1px solid gray",
+    width: "30px!important",
+    minWidth: "30px",
     borderTop: "0",
     borderRadius: 0,
     "&:hover": {
@@ -38,13 +40,14 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     display: "flex",
     alignItems: "center",
+    flexWrap: "wrap",
   },
   iconButton: {
     marginTop: "1.5rem",
   },
   flagBox: {
     height: "1.5rem",
-    width: "95%",
+    width: "30px",
     border: "1px solid gray",
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,

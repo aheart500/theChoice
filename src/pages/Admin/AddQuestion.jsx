@@ -45,7 +45,7 @@ const useStyle = makeStyles(() => ({
     width: "25%",
   },
   correctAnswer: {
-    height: "3rem",
+    minHeight: "3rem",
   },
   button: {
     borderRadius: "20px",
