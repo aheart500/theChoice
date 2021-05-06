@@ -39,19 +39,25 @@ const PreTest = () => {
         </div>
         <div className="modal-content">
           <h1>Hi {userState.name}!</h1>
-          {tests?.map((test) => {
-            const withSections = ["sat", "est"].includes(test.type);
-            return (
-              <Link to={`/test/${test.id}`} key={test.id} style={{ margin: "1rem 0" }}>
-                {test.name} -- {test.type.toUpperCase()} MATH
-                {withSections
-                  ? ` --  2 Sections (${test.type === "sat" ? "25" : "20"}, 55) Mins`
-                  : test.type === "act"
-                  ? " -- 60 Mins"
-                  : test.duration}
-              </Link>
-            );
-          })}
+          {userState.uid ? (
+            tests?.map((test) => {
+              const withSections = ["sat", "est"].includes(test.type);
+              return (
+                <Link to={`/test/${test.id}`} key={test.id} style={{ margin: "1rem 0" }}>
+                  {test.name} -- {test.type.toUpperCase()} MATH
+                  {withSections
+                    ? ` --  2 Sections (${test.type === "sat" ? "25" : "20"}, 55) Mins`
+                    : test.type === "act"
+                    ? " -- 60 Mins"
+                    : test.duration}
+                </Link>
+              );
+            })
+          ) : (
+            <div>
+              <Link to="/signin">Sign in</Link>
+            </div>
+          )}
         </div>
       </div>
       <Footer />

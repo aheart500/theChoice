@@ -8,6 +8,11 @@ export default function userReducer(state, action) {
 
     case "LOGOUT":
       return { isLoggedIn: false };
+    case "TEST":
+      return {
+        ...state,
+        testsTaken: state.testsTaken ? state.testsTaken.concat(action.payload) : [action.payload],
+      };
     default:
       return state;
   }

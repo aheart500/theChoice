@@ -8,7 +8,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Select from "@material-ui/core/Select";
-import { TextField } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import firebase from "firebase/app";
 import DialogTitle from "@material-ui/core/DialogTitle";

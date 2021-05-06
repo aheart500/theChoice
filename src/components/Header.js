@@ -15,24 +15,18 @@ export default function Header({ user }) {
           <FaPhoneAlt size="2em" />
         </a>
         {user ? (
-          <Link to="./myaccount" user={user}>
-            <a href="r" className="icon-buttons">
-              <FaUser size="2em" />
-            </a>
+          <Link to="./myaccount" user={user} className="icon-buttons">
+            <FaUser size="2em" />
           </Link>
         ) : (
-          <Link to="./signup">
-            <a href="r" className="icon-buttons">
-              <FaUser size="2em" />
-            </a>
+          <Link to="./signup" className="icon-buttons">
+            <FaUser size="2em" />
           </Link>
         )}
 
         <Menu right>
-          <Link to="./">
-            <a className="menu-item" href="#a">
-              Home
-            </a>
+          <Link to="./" className="icon-buttons">
+            Home
           </Link>
 
           <a className="menu-item" href="#tests">

@@ -1,9 +1,16 @@
 import React, { useState, useContext } from "react";
 import Header from "../components/Header";
 import UserContext from "../Contexts/User/UserContext";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 export default function MyAccount() {
   const [profile, setProfile] = useState(true);
-  const { userState: userProfile } = useContext(UserContext);
+  const history = useHistory();
+  const { userState: userProfile, Logout } = useContext(UserContext);
+  const handleLogout = () => {
+    Logout();
+    history.push("/");
+  };
   return (
     <>
       <Header />
@@ -33,6 +40,9 @@ export default function MyAccount() {
               </>
             )}
           </div>
+          <Button style={{ marginLeft: "10rem" }} variant="contained" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
         {profile && (
           <div className="profile">
@@ -48,11 +58,25 @@ export default function MyAccount() {
               <h3>{userProfile?.phone}</h3>
             </div>
             <div className="academic-info">Academic Info</div>
+
             <div className="data-points">
-              <h2>Real Score</h2>
-              <h3>32</h3>
-              <h2>Latest Practice Score</h2>
-              <h3>33</h3>
+              {userProfile.testsTaken
+                ? userProfile.testsTaken.map((test, i) => {
+                    return (
+                      <div
+                        key={i}
+                        style={{ display: "flex", justifyContent: "space-between", width: "40rem" }}
+                      >
+                        <h1>
+                          {test.name} --- {test.type}
+                        </h1>
+                        <h2>
+                          {test.score} / {test.totalQuestions}
+                        </h2>
+                      </div>
+                    );
+                  })
+                : "You haven't done any tests yet"}
             </div>
           </div>
         )}

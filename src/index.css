@@ -17,6 +17,10 @@ html {
 img {
   pointer-events: none;
 }
+.homme {
+  width: 99vw;
+  overflow: hidden;
+}
 .app-header {
   width: 100vw;
   position: fixed;
@@ -388,7 +392,6 @@ Note: Beware of modifying this element as it can break the animations - you shou
   padding-top: 30px;
 }
 .testimonials {
-  width: 100vw;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -464,6 +467,11 @@ footer .center a {
 }
 .testmonial {
   background-color: #373a47;
+}
+.slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
 .popup-content {
   width: 80vw;

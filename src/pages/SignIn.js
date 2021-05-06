@@ -21,7 +21,7 @@ export default function SignIn(props) {
   };
 
   return (
-    <>
+    <div className="preTestContianer">
       <Header />
       <div className="signup-form">
         <h1 style={{ marginTop: "100px" }}>Welcome Back! Sign in below</h1>
@@ -51,6 +51,6 @@ export default function SignIn(props) {
         </form>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }

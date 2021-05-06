@@ -36,6 +36,15 @@ const useStyle = makeStyles({
   notHighlighted: {
     backgroundColor: "white",
   },
+  sectionsBox: {
+    display: "flex",
+    marginLeft: "3rem",
+    alignItems: "center",
+    color: "white",
+  },
+  sectionBtn: {
+    marginLeft: "1rem",
+  },
 });
 const Header = ({
   handlePrev,
@@ -46,6 +55,10 @@ const Header = ({
   time,
   startTime,
   handleTimeFinish,
+  section,
+  setCurrentSection,
+  review,
+  withSections,
 }) => {
   const classes = useStyle();
   return (
@@ -60,6 +73,18 @@ const Header = ({
         <Button className={classes.btn} variant="contained" onClick={handleNext}>
           Next
         </Button>
+      </div>
+      <div className={classes.sectionsBox}>
+        <h3>Section {section}</h3>
+        {review && withSections && (
+          <Button
+            className={classes.sectionBtn}
+            variant="contained"
+            onClick={() => setCurrentSection(section === 1 ? 2 : 1)}
+          >
+            {section === 1 ? 2 : 1}
+          </Button>
+        )}
       </div>
       <div className={classes.controlButtons}>
         <Button
@@ -79,7 +104,7 @@ const Header = ({
           variant="contained"
           onClick={handleEnd}
         >
-          End Section
+          End {review ? "Review" : "Section"}
         </Button>
         <TimeDisplay start={startTime} time={time} handleFinish={handleTimeFinish} />
       </div>

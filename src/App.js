@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/Admin/Login";
 import AdminPage from "./pages/Admin/Admin";
 import UserState from "./Contexts/User/UserState";
+import Student from "./pages/Student";
 function App() {
   // Initialize Firebase
   if (!firebase.apps.length) {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/pretest" component={PreTest} />
           <Route exact path="/test/:id" component={Test} />
+          <Route exact path="/student/:id" component={Student} />
           <Route path="/tutoring" component={Tutoring} />
           <Route path="/mysessions" component={MySessions} />
           <Route path="/myaccount" component={MyAccount} />

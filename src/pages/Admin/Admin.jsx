@@ -3,8 +3,9 @@ import Header from "./Header";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import TestsList from "./TestsList";
+
 import Test from "./Test";
+import Main from "./Main";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -22,7 +23,7 @@ const Admin = () => {
       <main className={classes.main}>
         <Router>
           <Route exact path="/admin/test/:id" component={Test} />
-          <Route exact path="/admin" component={TestsList} />
+          <Route exact path="/admin" component={Main} />
         </Router>
       </main>
     </div>

@@ -47,7 +47,10 @@ export default function UserState({ children }) {
       .then(() => dispatch({ type: "LOGOUT" }))
       .catch((e) => console.log(e));
   };
-  console.log("user", state);
+  const AddTest = (test) => {
+    dispatch({ type: "TEST", payload: test });
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -55,6 +58,7 @@ export default function UserState({ children }) {
         Login,
         Logout,
         Register,
+        AddTest,
       }}
     >
       {loading ? <Loader /> : children}
