@@ -3,9 +3,11 @@ import UserReducer from "./UserReducer";
 import React, { useReducer, useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader";
 import firebase from "firebase/app";
-import { generateUserDocument } from "../../services/user";
+import { generateUserDocument, addToUserData } from "../../services/user";
+
 export default function UserState({ children }) {
   const [loading, setLoading] = useState(true);
+
   const initialState = {
     isLoggedIn: false,
     isAdmin: false,
@@ -32,6 +34,13 @@ export default function UserState({ children }) {
         .catch((err) => console.log("error"));
     }
   };
+  const UpdateUser = async (userId, data) => {
+    addToUserData(userId, data)
+      .then(() => {
+        dispatch({ type: "UPDATE", payload: data });
+      })
+      .catch((e) => console.log(e));
+  };
   const Register = async ({ username, password, ...additionalData }) => {
     try {
       const { user } = await firebase.auth().createUserWithEmailAndPassword(username, password);
@@ -50,7 +59,7 @@ export default function UserState({ children }) {
   const AddTest = (test) => {
     dispatch({ type: "TEST", payload: test });
   };
-
+  console.log(state, "user");
   return (
     <UserContext.Provider
       value={{
@@ -59,6 +68,7 @@ export default function UserState({ children }) {
         Logout,
         Register,
         AddTest,
+        UpdateUser,
       }}
     >
       {loading ? <Loader /> : children}

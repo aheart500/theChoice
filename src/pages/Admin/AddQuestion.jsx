@@ -52,11 +52,17 @@ const useStyle = makeStyles(() => ({
     marginTop: "2rem",
   },
 }));
+const mcqSets = [
+  ["a", "b", "c", "d"],
+  ["a", "b", "c", "d", "e"],
+  ["f", "g", "h", "i", "j", "k"],
+];
 const AddQuestion = ({ addQuestion, open, onClose, withSections }) => {
   const classes = useStyle();
   const [uploadedFile, setUploadedFile] = useState(null);
   const [questionType, setQuestionType] = useState("");
   const [questionSection, setQuestionSection] = useState("");
+  const [mcqSet, setMcqSet] = useState("0");
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef(null);
@@ -76,7 +82,10 @@ const AddQuestion = ({ addQuestion, open, onClose, withSections }) => {
   const handleChangeQuestionSection = (e) => {
     setQuestionSection(e.target.value);
   };
-
+  const handleChangeAnswerSet = (e) => {
+    setCorrectAnswer("");
+    setMcqSet(e.target.value);
+  };
   const isValid =
     uploadedFile && questionType && correctAnswer && (withSections ? questionSection !== "" : true);
   const handleFormSubmit = (e) => {
@@ -91,11 +100,18 @@ const AddQuestion = ({ addQuestion, open, onClose, withSections }) => {
       .put(uploadedFile)
       .then((snapshot) => {
         snapshot.ref.getDownloadURL().then((url) => {
-          addQuestion({ image: url, type: questionType, correctAnswer, section: questionSection });
+          addQuestion({
+            image: url,
+            type: questionType,
+            mcqSet,
+            correctAnswer,
+            section: questionSection,
+          });
           setUploadedFile(null);
           setQuestionType("");
           setCorrectAnswer("");
           setQuestionSection("");
+          setMcqSet("0");
           fileRef.current.value = "";
           setUploading(false);
           onClose();
@@ -141,16 +157,31 @@ const AddQuestion = ({ addQuestion, open, onClose, withSections }) => {
           </FormControl>
           <div className={classes.correctAnswer}>
             {questionType === "mcq" ? (
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Correct Answer</FormLabel>
-                <RadioGroup row name="ans" value={correctAnswer} onChange={handleChangeAnswer}>
-                  <FormControlLabel value="a" control={<Radio />} label="A" />
-                  <FormControlLabel value="b" control={<Radio />} label="B" />
-                  <FormControlLabel value="c" control={<Radio />} label="C" />
-                  <FormControlLabel value="d" control={<Radio />} label="D" />
-                  <FormControlLabel value="e" control={<Radio />} label="E" />
-                </RadioGroup>
-              </FormControl>
+              <div>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">MCQ Answer Set</FormLabel>
+                  <RadioGroup row name="mcqSet" value={mcqSet} onChange={handleChangeAnswerSet}>
+                    <FormControlLabel value="0" control={<Radio />} label="ABCD" />
+                    <FormControlLabel value="1" control={<Radio />} label="ABCDE" />
+                    <FormControlLabel value="2" control={<Radio />} label="FGHIJK" />
+                  </RadioGroup>
+                </FormControl>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Correct Answer</FormLabel>
+                  <RadioGroup row name="ans" value={correctAnswer} onChange={handleChangeAnswer}>
+                    {mcqSets[parseInt(mcqSet)].map((ans) => {
+                      return (
+                        <FormControlLabel
+                          key={ans}
+                          value={ans}
+                          control={<Radio />}
+                          label={ans.toUpperCase()}
+                        />
+                      );
+                    })}
+                  </RadioGroup>
+                </FormControl>
+              </div>
             ) : questionType === "shortAnswer" ? (
               <div>
                 <TextField

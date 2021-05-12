@@ -7,8 +7,8 @@ const useStyle = makeStyles(() => ({
     margin: "1rem 0",
   },
   image: {
-    width: "66.5%",
-    height: "20rem",
+    maxWidth: "90%",
+    maxHeight: "25rem",
   },
 }));
 const Question = ({ question, i, handleRemoveQuestion }) => {

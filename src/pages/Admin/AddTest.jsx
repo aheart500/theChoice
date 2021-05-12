@@ -12,6 +12,10 @@ import Select from "@material-ui/core/Select";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import Collapse from "@material-ui/core/Collapse";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
 const useStyles = makeStyles((theme) => ({
   dialogPaper: {
     minWidth: "50%",
@@ -64,13 +68,14 @@ const AddTest = ({ addTest, open, onClose }) => {
       type: "",
       duration: "",
       availability: "all",
+      attempts: "unlimited",
     },
     validate,
     onSubmit: (values) => {
       firebase
         .firestore()
         .collection("tests")
-        .add({ ...values, questions: [], created: firebase.firestore.FieldValue.serverTimestamp() })
+        .add({ ...values, questions: [], active: true ,created: firebase.firestore.FieldValue.serverTimestamp() })
         .then((response) => {
           addTest({ ...values, id: response.id });
           formik.resetForm();
@@ -127,6 +132,14 @@ const AddTest = ({ addTest, open, onClose }) => {
           helperText={formik.touched.availability && formik.errors.availability}
           {...formik.getFieldProps("availability")}
         />
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Attempts</FormLabel>
+          <RadioGroup row name="attempts" {...formik.getFieldProps("attempts")}>
+            <FormControlLabel value="unlimited" control={<Radio />} label="Unlimited" />
+            <FormControlLabel value="1" control={<Radio />} label="1" />
+            <FormControlLabel value="2" control={<Radio />} label="2" />
+          </RadioGroup>
+        </FormControl>
         <Button className={classes.button} color="primary" type="submit" variant="contained">
           Add test
         </Button>

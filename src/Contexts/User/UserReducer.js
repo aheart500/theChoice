@@ -8,6 +8,8 @@ export default function userReducer(state, action) {
 
     case "LOGOUT":
       return { isLoggedIn: false };
+    case "UPDATE":
+      return { ...state, ...action.payload };
     case "TEST":
       return {
         ...state,

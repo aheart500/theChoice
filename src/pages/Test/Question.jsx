@@ -6,16 +6,22 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
+import { FaCalculator, FaBan } from "react-icons/fa";
 const useStyle = makeStyles(() => ({
   questionCard: {
     margin: "1.5rem 3rem",
   },
   image: {
-    width: "66.5%",
-    height: "20rem",
+    maxWidth: "90%",
+    maxHeight: "25rem",
   },
 }));
-const Question = ({ question, index, setAnswer, review }) => {
+const mcqSets = [
+  ["a", "b", "c", "d"],
+  ["a", "b", "c", "d", "e"],
+  ["f", "g", "h", "i", "j", "k"],
+];
+const Question = ({ question, index, setAnswer, review, testType, currentSection }) => {
   const classes = useStyle();
   if (!question) return <h1>No Questions Added Yet</h1>;
   const validate = (ans) => {
@@ -29,7 +35,15 @@ const Question = ({ question, index, setAnswer, review }) => {
   };
   return (
     <div key={question.number} className={classes.questionCard}>
-      <h2>Question {index}</h2>
+      <h2>
+        Question {index}{" "}
+        {testType === "sat" && currentSection === 1 && (
+          <div style={{ position: "relative" }}>
+            <FaBan size="4em" className="ban" />
+            <FaCalculator size="2em" className="calc" />
+          </div>
+        )}
+      </h2>
       <img src={question.image} alt="questionImage" className={classes.image} />
       <div
         style={{
@@ -47,35 +61,16 @@ const Question = ({ question, index, setAnswer, review }) => {
             value={question.userAnswer}
             onChange={(e) => setAnswer(question.number, e.target.value)}
           >
-            <FormControlLabel
-              value="a"
-              control={<Radio />}
-              label={`A           ${validate("a")}`}
-            />
-
-            <FormControlLabel
-              value="b"
-              control={<Radio />}
-              label={`B           ${validate("b")}`}
-            />
-
-            <FormControlLabel
-              value="c"
-              control={<Radio />}
-              label={`C           ${validate("c")}`}
-            />
-
-            <FormControlLabel
-              value="d"
-              control={<Radio />}
-              label={`D           ${validate("d")}`}
-            />
-
-            <FormControlLabel
-              value="e"
-              control={<Radio />}
-              label={`E           ${validate("e")}`}
-            />
+            {mcqSets[parseInt(question.mcqSet)]?.map((a, i) => {
+              return (
+                <FormControlLabel
+                  key={i}
+                  value={a}
+                  control={<Radio />}
+                  label={`${a.toUpperCase()}          ${validate(a)}`}
+                />
+              );
+            })}
           </RadioGroup>
         </FormControl>
       ) : (

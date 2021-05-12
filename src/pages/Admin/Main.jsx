@@ -14,7 +14,7 @@ const Main = () => {
   useEffect(() => {
     getStudents()
       .then((response) => {
-        setStudents(response.filter((s) => !s.isAdmin));
+        setStudents(response);
       })
       .catch((e) => {
         console.log(e);
@@ -39,6 +39,7 @@ const Main = () => {
                 key={student.id}
                 style={{
                   cursor: "pointer",
+                  marginBottom: "0.5rem",
                 }}
                 onClick={() => window.location.replace(`/student/${student.id}`)}
               >

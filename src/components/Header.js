@@ -3,7 +3,7 @@ import { stack as Menu } from "react-burger-menu";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import minilogo from "../images/mini-logo.png";
 import { Link } from "react-router-dom";
-
+import { HashLink } from "react-router-hash-link";
 export default function Header({ user }) {
   return (
     <header className="app-header">
@@ -25,22 +25,21 @@ export default function Header({ user }) {
         )}
 
         <Menu right>
-          <Link to="./" className="menu-item">
+          <HashLink to="./" className="menu-item">
             Home
-          </Link>
-
-          <a className="menu-item" href="#tests">
+          </HashLink>
+          <HashLink className="menu-item" to="/home#tests">
             Tests
-          </a>
-          <a className="menu-item" href="#services">
+          </HashLink>
+          <HashLink className="menu-item" to="/home#services">
             Services
-          </a>
-          <a className="menu-item" href="#about">
+          </HashLink>
+          <HashLink className="menu-item" to="/home#about">
             About
-          </a>
-          <a className="menu-item" href="#testimonials">
+          </HashLink>
+          <HashLink className="menu-item" to="/home#testimonials">
             Testimonials
-          </a>
+          </HashLink>
         </Menu>
       </div>
     </header>

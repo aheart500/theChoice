@@ -3,9 +3,11 @@ import AddTest from "./AddTest";
 import { Link } from "react-router-dom";
 import firebase from "firebase/app";
 import Button from "@material-ui/core/Button";
+import Switch from "@material-ui/core/Switch";
 const TestsList = () => {
   const [tests, setTests] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const getTests = async () => {
     const snapshot = await firebase.firestore().collection("tests").orderBy("created").get();
     return snapshot.docs.map((doc) => {
@@ -22,7 +24,21 @@ const TestsList = () => {
         console.log(e);
       });
   }, []);
-
+  const handleActiveSwitch = (testId, active) => {
+    setLoading(true);
+    firebase
+      .firestore()
+      .collection("tests")
+      .doc(testId)
+      .update({
+        active,
+      })
+      .then(() => {
+        setTests(tests.map((test) => (test.id === testId ? { ...test, active } : test)));
+        setLoading(false);
+      })
+      .catch((e) => console.log(e));
+  };
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -37,12 +53,18 @@ const TestsList = () => {
         addTest={(data) => setTests([...tests, data])}
       />
 
-      {tests.map(({ name, type, id }) => {
+      {tests.map(({ name, type, id, active }) => {
         return (
           <div key={id}>
             <Link to={`/admin/test/${id}`}>
               {name} -- {type.toUpperCase()} Test
             </Link>
+
+            <Switch
+              checked={active}
+              onChange={(e) => handleActiveSwitch(id, e.target.checked)}
+              disabled={loading}
+            />
           </div>
         );
       })}

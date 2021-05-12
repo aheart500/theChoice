@@ -1,13 +1,16 @@
 import React, { useState, useContext } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-import "firebase/firestore";
+import "firebase/auth";
+import firebase from "firebase/app";
 import UserContext from "../Contexts/User/UserContext";
+import { Button } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+const FBProvider = new firebase.auth.FacebookAuthProvider();
 
-export default function SignIn(props) {
+const SignIn = () => {
   const { Login } = useContext(UserContext);
-
+  const history = useHistory();
   const [studentEmail, setStudentEmail] = useState("");
   const [studentPassword, setStudentPassword] = useState("");
 
@@ -19,7 +22,13 @@ export default function SignIn(props) {
       })
       .catch((e) => console.log(e));
   };
-
+  const handleSignUpWithFacebook = () => {
+    firebase
+      .auth()
+      .signInWithPopup(FBProvider)
+      .then(() => history.replace("/"))
+      .catch((e) => console.log(e));
+  };
   return (
     <div className="preTestContianer">
       <Header />
@@ -49,8 +58,19 @@ export default function SignIn(props) {
 
           <input type="submit" value="Sign In" style={{ textAlign: "center" }} />
         </form>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{
+            width: "16%",
+          }}
+          onClick={handleSignUpWithFacebook}
+        >
+          Sign In with facebook
+        </Button>
       </div>
       <Footer />
     </div>
   );
-}
+};
+export default SignIn;

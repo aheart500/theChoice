@@ -1,10 +1,20 @@
-import React, { useContext } from "react";
-import { Redirect, Route } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Redirect, Route, useHistory } from "react-router-dom";
 import UserContext from "../Contexts/User/UserContext";
 const ProtectedRoute = ({ component: Component, onlyAdmin, ...rest }) => {
-  const {
-    userState: { isLoggedIn, isAdmin },
-  } = useContext(UserContext);
+  const history = useHistory();
+  const { userState } = useContext(UserContext);
+  const { isLoggedIn, isAdmin } = userState;
+  useEffect(() => {
+    if (
+      !userState.isAdmin &&
+      userState.isLoggedIn &&
+      ["google", "facebook"].includes(userState.provider) &&
+      !userState.parentNumber
+    ) {
+      history.push("/signup");
+    }
+  }, [userState, history]);
   return (
     <Route
       {...rest}

@@ -173,10 +173,33 @@ const Test = ({ match: { params } }) => {
         correctQuestionsLength={correctQuestions.length}
         setReview={setReview}
         timeUp={timeUp}
+        testType={test.type}
       />
     );
   }
+  if (!test.active) {
+    return (
+      <div className="flexCenter">
+        <h1>This test isn't active right now</h1>
+      </div>
+    );
+  }
+  if (!review && userState.testsTaken && test.attempts && test.attempts !== "unlimited") {
+    let finishedAttempts = 0;
 
+    userState.testsTaken?.forEach((t) => {
+      if (t.id === test.id) {
+        finishedAttempts += 1;
+      }
+    });
+    if (finishedAttempts >= parseInt(test.attempts)) {
+      return (
+        <div className="flexCenter">
+          <h1>You can no longer take this test</h1>
+        </div>
+      );
+    }
+  }
   return (
     <div className="preTestContianer">
       <MyDialog
@@ -204,6 +227,8 @@ const Test = ({ match: { params } }) => {
         review={review}
         setAnswer={handleAnswer}
         index={currentQuestion}
+        currentSection={currentSection}
+        testType={test.type}
       />
       <Footer
         questions={sectionQuestions}

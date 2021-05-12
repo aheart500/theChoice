@@ -21,11 +21,8 @@ import "reactjs-popup/dist/index.css";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 
 export default function Home() {
-  const history = useHistory();
-
   const user = firebase.auth().currentUser;
 
   const settings = {
@@ -74,12 +71,6 @@ export default function Home() {
     ],
   };
 
-  const handleTestClick = (test) => {
-    history.push({
-      pathname: "/pretest",
-      test: test,
-    });
-  };
   return (
     <div className="homme">
       <Header user={user} />
@@ -92,18 +83,18 @@ export default function Home() {
       <div className="testprep" id="tests">
         <h1>Test Preparation</h1>
         <div className="tests">
-          <div className="test" onClick={() => handleTestClick(sat)}>
+          <Link className="test" to={`/pretest?testType=sat`}>
             <img src={sat} width="120px" alt="sat" />
-          </div>
-          <div className="test" onClick={() => handleTestClick(act)}>
+          </Link>
+          <Link className="test" to={`/pretest?testType=act`}>
             <img src={act} width="120px" alt="act" />
-          </div>
-          <div className="test" onClick={() => handleTestClick(est)}>
+          </Link>
+          <Link className="test" to={`/pretest?testType=est`}>
             <img src={est} width="120px" alt="est" />
-          </div>
-          <div className="test" onClick={() => handleTestClick(ap)}>
+          </Link>
+          <Link className="test" to={`/pretest?testType=ap`}>
             <img src={ap} width="120px" alt="ap" />
-          </div>
+          </Link>
         </div>
       </div>
       <div className="ourservices" id="services">

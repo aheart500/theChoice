@@ -6,16 +6,34 @@ export const generateUserDocument = async (user, additionalData) => {
   const snapshot = await userRef.get();
   if (!snapshot.exists) {
     try {
-      console.log("additiiona", additionalData);
-      await userRef.set({
+      let userToSet = {
         email: user.email,
         ...additionalData,
-      });
+        testsTaken: [],
+      };
+      if (user.providerData?.[0]?.providerId === "facebook.com") {
+        userToSet.provider = "facebook";
+        userToSet.name = user.displayName;
+      }
+      await userRef.set(userToSet);
     } catch (error) {
       console.error("Error creating user document", error);
     }
   }
   return getUserDocument(user.uid);
+};
+export const addToUserData = async (userId, data) => {
+  if (!userId) return;
+  const userRef = firebase.firestore().doc(`users/${userId}`);
+  const snapshot = await userRef.get();
+  if (!snapshot.exists) return;
+  try {
+    await userRef.set(data, { merge: true });
+    return true;
+  } catch (e) {
+    console.error("Error updating user document", e);
+    return false;
+  }
 };
 export const getUserDocument = async (uid) => {
   if (!uid) return null;

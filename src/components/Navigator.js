@@ -1,9 +1,4 @@
-import React, { useState } from "react";
-import { stack as Menu } from "react-burger-menu";
-import { FaPhoneAlt, FaUser } from "react-icons/fa";
-import logo from "../images/logo.png";
-import minilogo from "../images/mini-logo.png";
-import { Link } from "react-router-dom";
+import React from "react";
 
 export default function Navigator({ profile }) {
   return (
