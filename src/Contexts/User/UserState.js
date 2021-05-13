@@ -59,7 +59,6 @@ export default function UserState({ children }) {
   const AddTest = (test) => {
     dispatch({ type: "TEST", payload: test });
   };
-  console.log(state, "user");
   return (
     <UserContext.Provider
       value={{

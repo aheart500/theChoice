@@ -15,6 +15,10 @@ export const generateUserDocument = async (user, additionalData) => {
         userToSet.provider = "facebook";
         userToSet.name = user.displayName;
       }
+      if (user.providerData?.[0]?.providerId === "google.com") {
+        userToSet.provider = "google";
+        userToSet.name = user.displayName;
+      }
       await userRef.set(userToSet);
     } catch (error) {
       console.error("Error creating user document", error);

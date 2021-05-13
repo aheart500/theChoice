@@ -9,14 +9,17 @@ import "firebase/auth";
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import GTranslateIcon from "@material-ui/icons/GTranslate";
 
 const useStyles = makeStyles((theme) => ({
   input: {
     margin: "1rem 0",
-    width: "50%",
+    width: "70%",
   },
 }));
 const FBProvider = new firebase.auth.FacebookAuthProvider();
+const GoogleProvider = new firebase.auth.GoogleAuthProvider();
 const validate = (values, withoutPassword) => {
   const errors = {};
   if (!values.name) {
@@ -123,6 +126,16 @@ const Signup = () => {
       })
       .catch((e) => console.log(e));
   };
+  const handleSignUpWithGoogle = () => {
+    firebase
+      .auth()
+      .signInWithPopup(GoogleProvider)
+      .then(({ user }) => {
+        formik.setFieldValue("name", user.displayName);
+        formik.setFieldValue("email", user.email);
+      })
+      .catch((e) => console.log(e));
+  };
   return (
     <>
       <Header />
@@ -133,130 +146,151 @@ const Signup = () => {
         </h1>
         <h2 style={{ marginBottom: "0px" }}>Already have an account?</h2>
         <Link to="/signin">Click here to log in</Link>
-        <form onSubmit={formik.handleSubmit}>
-          <TextField
-            id="name"
-            label="Name"
-            type="text"
-            className={classes.input}
-            error={formik.touched.name && !!formik.errors.name}
-            helperText={formik.touched.name && formik.errors.name}
-            {...formik.getFieldProps("name")}
-          />
-          <TextField
-            id="phone"
-            label="Phone"
-            type="text"
-            className={classes.input}
-            error={formik.touched.phone && !!formik.errors.phone}
-            helperText={formik.touched.phone && formik.errors.phone}
-            {...formik.getFieldProps("phone")}
-          />
-          <TextField
-            id="grade"
-            label="Grade"
-            type="text"
-            className={classes.input}
-            error={formik.touched.grade && !!formik.errors.grade}
-            helperText={formik.touched.grade && formik.errors.grade}
-            {...formik.getFieldProps("grade")}
-          />
-          <TextField
-            id="email"
-            label="Email"
-            type="text"
-            className={classes.input}
-            disabled={thirdLogin}
-            error={formik.touched.email && !!formik.errors.email}
-            helperText={formik.touched.email && formik.errors.email}
-            {...formik.getFieldProps("email")}
-          />
-          <TextField
-            id="sat"
-            label="What's your highest SAT score?"
-            type="number"
-            className={classes.input}
-            error={formik.touched.sat && !!formik.errors.sat}
-            helperText={formik.touched.sat && formik.errors.sat}
-            {...formik.getFieldProps("sat")}
-          />
-          <TextField
-            id="act"
-            label="What's your highest ACT score?"
-            type="number"
-            className={classes.input}
-            error={formik.touched.act && !!formik.errors.act}
-            helperText={formik.touched.act && formik.errors.act}
-            {...formik.getFieldProps("act")}
-          />
-          <TextField
-            id="est"
-            label="What's your highest EST score?"
-            type="number"
-            className={classes.input}
-            error={formik.touched.est && !!formik.errors.est}
-            helperText={formik.touched.est && formik.errors.est}
-            {...formik.getFieldProps("est")}
-          />
-          {!thirdLogin && (
-            <>
-              <TextField
-                id="password"
-                label="Password"
-                type="password"
-                className={classes.input}
-                error={formik.touched.password && !!formik.errors.password}
-                helperText={formik.touched.password && formik.errors.password}
-                {...formik.getFieldProps("password")}
-              />
-              <TextField
-                id="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                className={classes.input}
-                error={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
-                helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                {...formik.getFieldProps("confirmPassword")}
-              />
-            </>
-          )}
-          <TextField
-            id="groupCode"
-            label="Group Code"
-            type="text"
-            className={classes.input}
-            error={formik.touched.groupCode && !!formik.errors.groupCode}
-            helperText={formik.touched.groupCode && formik.errors.groupCode}
-            {...formik.getFieldProps("groupCode")}
-          />
-          <TextField
-            id="parentName"
-            label="Parent Name"
-            type="text"
-            className={classes.input}
-            error={formik.touched.parentName && !!formik.errors.parentName}
-            helperText={formik.touched.parentName && formik.errors.parentName}
-            {...formik.getFieldProps("parentName")}
-          />
-          <TextField
-            id="parentNumber"
-            label="Parent Number"
-            type="text"
-            className={classes.input}
-            error={formik.touched.parentNumber && !!formik.errors.parentNumber}
-            helperText={formik.touched.parentNumber && formik.errors.parentNumber}
-            {...formik.getFieldProps("parentNumber")}
-          />
-          <Button variant="contained" color="primary" className={classes.input} type="submit">
-            {thirdLogin ? "Update Data" : "Create User"}{" "}
-          </Button>
-        </form>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <form style={{ width: "80%" }} onSubmit={formik.handleSubmit}>
+            <TextField
+              id="name"
+              label="Name"
+              type="text"
+              className={classes.input}
+              error={formik.touched.name && !!formik.errors.name}
+              helperText={formik.touched.name && formik.errors.name}
+              {...formik.getFieldProps("name")}
+            />
+            <TextField
+              id="phone"
+              label="Phone"
+              type="text"
+              className={classes.input}
+              error={formik.touched.phone && !!formik.errors.phone}
+              helperText={formik.touched.phone && formik.errors.phone}
+              {...formik.getFieldProps("phone")}
+            />
+            <TextField
+              id="grade"
+              label="Grade"
+              type="text"
+              className={classes.input}
+              error={formik.touched.grade && !!formik.errors.grade}
+              helperText={formik.touched.grade && formik.errors.grade}
+              {...formik.getFieldProps("grade")}
+            />
+            <TextField
+              id="email"
+              label="Email"
+              type="text"
+              className={classes.input}
+              disabled={thirdLogin}
+              error={formik.touched.email && !!formik.errors.email}
+              helperText={formik.touched.email && formik.errors.email}
+              {...formik.getFieldProps("email")}
+            />
+            <TextField
+              id="sat"
+              label="What's your highest SAT score?"
+              type="number"
+              className={classes.input}
+              error={formik.touched.sat && !!formik.errors.sat}
+              helperText={formik.touched.sat && formik.errors.sat}
+              {...formik.getFieldProps("sat")}
+            />
+            <TextField
+              id="act"
+              label="What's your highest ACT score?"
+              type="number"
+              className={classes.input}
+              error={formik.touched.act && !!formik.errors.act}
+              helperText={formik.touched.act && formik.errors.act}
+              {...formik.getFieldProps("act")}
+            />
+            <TextField
+              id="est"
+              label="What's your highest EST score?"
+              type="number"
+              className={classes.input}
+              error={formik.touched.est && !!formik.errors.est}
+              helperText={formik.touched.est && formik.errors.est}
+              {...formik.getFieldProps("est")}
+            />
+            {!thirdLogin && (
+              <>
+                <TextField
+                  id="password"
+                  label="Password"
+                  type="password"
+                  className={classes.input}
+                  error={formik.touched.password && !!formik.errors.password}
+                  helperText={formik.touched.password && formik.errors.password}
+                  {...formik.getFieldProps("password")}
+                />
+                <TextField
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  className={classes.input}
+                  error={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
+                  helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                  {...formik.getFieldProps("confirmPassword")}
+                />
+              </>
+            )}
+            <TextField
+              id="groupCode"
+              label="Group Code"
+              type="text"
+              className={classes.input}
+              error={formik.touched.groupCode && !!formik.errors.groupCode}
+              helperText={formik.touched.groupCode && formik.errors.groupCode}
+              {...formik.getFieldProps("groupCode")}
+            />
+            <TextField
+              id="parentName"
+              label="Parent Name"
+              type="text"
+              className={classes.input}
+              error={formik.touched.parentName && !!formik.errors.parentName}
+              helperText={formik.touched.parentName && formik.errors.parentName}
+              {...formik.getFieldProps("parentName")}
+            />
+            <TextField
+              id="parentNumber"
+              label="Parent Number"
+              type="text"
+              className={classes.input}
+              error={formik.touched.parentNumber && !!formik.errors.parentNumber}
+              helperText={formik.touched.parentNumber && formik.errors.parentNumber}
+              {...formik.getFieldProps("parentNumber")}
+            />
+            <Button variant="contained" color="primary" className={classes.input} type="submit">
+              {thirdLogin ? "Update Data" : "Create User"}{" "}
+            </Button>
+          </form>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Button
+              variant="contained"
+              startIcon={<FacebookIcon />}
+              style={{
+                backgroundColor: "lightblue",
+                margin: "1rem 0",
+              }}
+              onClick={handleSignUpWithFacebook}
+            >
+              Sign Up with facebook
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<GTranslateIcon />}
+              style={{
+                backgroundColor: "lightgreen",
+              }}
+              onClick={handleSignUpWithGoogle}
+            >
+              Sign Up with google
+            </Button>
+          </div>
+        </div>
       </div>
-      <div>
-        <Button variant="contained" color="primary" onClick={handleSignUpWithFacebook}>
-          Sign Up with facebook
-        </Button>
-      </div>
+
       <Footer />
     </>
   );
