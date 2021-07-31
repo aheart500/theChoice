@@ -4,9 +4,9 @@ import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import minilogo from "../images/mini-logo.png";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
-export default function Header({ user }) {
+export default function Header({ user, style }) {
   return (
-    <header className="app-header">
+    <header className="app-header" style={style}>
       <Link to="./">
         <img src={minilogo} width="70px" alt="logo" />
       </Link>

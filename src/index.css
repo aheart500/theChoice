@@ -532,7 +532,7 @@ footer .center a {
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
-right: 0;
+  right: 0;
   opacity: 0.7;
 }
 .calc {
@@ -664,10 +664,20 @@ right: 0;
   width: 200px;
   text-align: center;
 }
+.data-points {
+  display: flex;
+  flex-direction: column;
+}
+.data-points div {
+  display: flex;
+  align-items: center;
+}
 .data-points h2 {
   color: #2e8bc0;
+  display: inline;
+  margin-right: 1rem;
 }
-.data-points h3 {
+.data-points span {
   font-weight: 400;
 }
 .test-title {

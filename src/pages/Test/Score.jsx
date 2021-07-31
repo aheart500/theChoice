@@ -13,7 +13,14 @@ const act_scroing = [
   30, 30, 31, 31, 32, 33, 34, 34, 35, 35, 36, 36,
 ];
 
-const Score = ({ correctQuestionsLength, questionsLength, setReview, timeUp, testType }) => {
+const Score = ({
+  correctQuestionsLength,
+  questionsLength,
+  setReview,
+  timeUp,
+  testType,
+  withReview,
+}) => {
   return (
     <div
       style={{
@@ -37,9 +44,11 @@ const Score = ({ correctQuestionsLength, questionsLength, setReview, timeUp, tes
             }`
           : ""}
       </h2>
-      <Button variant="contained" color="primary" onClick={() => setReview(true)}>
-        Review
-      </Button>
+      {withReview && (
+        <Button variant="contained" color="primary" onClick={() => setReview(true)}>
+          Review
+        </Button>
+      )}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import Footer from "./Footer";
 import Score from "./Score";
 import { useHistory } from "react-router-dom";
 import MyDialog from "./Dialog";
+import { shuffleArray } from "../../utils";
 const Test = ({ match: { params } }) => {
   const [loading, setLoading] = useState(true);
   const [accessDenied, setAccessDenied] = useState(false);
@@ -32,7 +33,7 @@ const Test = ({ match: { params } }) => {
           const testData = response.data();
           if (testData.availability === "all" || testData.availability === userState.groupCode) {
             setTest({ id: response.id, ...testData });
-            const qs = testData.questions
+            const qs = shuffleArray(testData.questions)
               .sort((a, b) => a.section - b.section)
               .map((q, i) => ({
                 ...q,
@@ -126,6 +127,20 @@ const Test = ({ match: { params } }) => {
       .catch((e) => {
         console.log(e);
       });
+    firebase
+      .firestore()
+      .collection("tests")
+      .doc(params.id)
+      .update({
+        underTakers: firebase.firestore.FieldValue.arrayUnion({
+          id: userState.uid,
+          name: userState.name || "",
+          score: correctQuestions.length,
+        }),
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
   const handleEnd = () => {
     if (review) {
@@ -172,6 +187,7 @@ const Test = ({ match: { params } }) => {
         questionsLength={questions.length}
         correctQuestionsLength={correctQuestions.length}
         setReview={setReview}
+        withReview={test.withReview}
         timeUp={timeUp}
         testType={test.type}
       />

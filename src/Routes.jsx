@@ -6,12 +6,15 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Test from "./pages/Test/Test.jsx";
 import PreTest from "./pages/PreTest";
 import Tutoring from "./pages/Tutoring";
-import Home from "./pages/Home";
-import MyAccount from "./pages/MyAccount";
+import Home from "./pages/Home/index";
+import MyAccount from "./pages/MyAccount/index";
+
 import MySessions from "./pages/MySessions";
 import Signup from "./pages/Signup";
 import SignIn from "./pages/SignIn";
 import Student from "./pages/Student";
+import Review from "./pages/Review";
+import Reviews from "./pages/Reviews";
 
 const Routes = () => {
   return (
@@ -24,7 +27,10 @@ const Routes = () => {
         <Route exact path="/student/:id" component={Student} />
         <Route path="/tutoring" component={Tutoring} />
         <Route path="/mysessions" component={MySessions} />
-        <Route path="/myaccount" component={MyAccount} />
+        <Route exact path="/review" component={Review} />
+        <Route exact path="/reviews" component={Reviews} />
+        <Route exact path="/myaccount" component={MyAccount} />
+        <Route exact path="/myaccount/edit" component={(props) => <Signup {...props} edit />} />
         <Route path="/signup" component={Signup} />
         <Route path="/signin" component={SignIn} />
         <Route path="/login" component={LoginPage} />

@@ -4,9 +4,9 @@ import logo from "../images/logo.png";
 
 import { Link } from "react-router-dom";
 
-export default function Footer() {
+export default function Footer({ style }) {
   return (
-    <footer style={{ marginTop: "auto" }}>
+    <footer style={style ? style : { marginTop: "auto" }}>
       <div className="footer-left">
         <ul className="footer-menu">
           <li>

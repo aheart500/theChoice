@@ -75,7 +75,14 @@ const AddTest = ({ addTest, open, onClose }) => {
       firebase
         .firestore()
         .collection("tests")
-        .add({ ...values, questions: [], active: true ,created: firebase.firestore.FieldValue.serverTimestamp() })
+        .add({
+          ...values,
+          questions: [],
+          underTakers: [],
+          active: true,
+          withReview: true,
+          created: firebase.firestore.FieldValue.serverTimestamp(),
+        })
         .then((response) => {
           addTest({ ...values, id: response.id });
           formik.resetForm();

@@ -1,20 +1,32 @@
-import React, { useState, useContext } from "react";
-import Header from "../components/Header";
-import UserContext from "../Contexts/User/UserContext";
+import React, { useState, useContext, useEffect } from "react";
+import Header from "../../components/Header";
+import UserContext from "../../Contexts/User/UserContext";
 import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+
 export default function MyAccount() {
   const [profile, setProfile] = useState(true);
   const history = useHistory();
   const { userState: userProfile, Logout } = useContext(UserContext);
+  useEffect(() => {
+    if (!userProfile.isLoggedIn) history.push("/signup");
+  }, [history, userProfile.isLoggedIn]);
   const handleLogout = () => {
     Logout();
     history.push("/");
   };
+
+  const handleEdit = () => {
+    history.push("/myaccount/edit");
+  };
   return (
     <>
       <Header />
+
       <div className="myaccount">
+        <Link to="review" style={{ margin: "2rem" }}>
+          Add Review
+        </Link>
         <div className="navigator">
           <div className="nav-option" onClick={() => setProfile(true)}>
             {profile ? (
@@ -40,7 +52,27 @@ export default function MyAccount() {
               </>
             )}
           </div>
-          <Button style={{ marginLeft: "10rem" }} variant="contained" onClick={handleLogout}>
+          <Button
+            style={{ marginLeft: "10rem" }}
+            variant="contained"
+            onClick={() => history.push("/review")}
+          >
+            Add Review
+          </Button>
+          <Button
+            style={{ marginLeft: "1rem" }}
+            variant="contained"
+            color="primary"
+            onClick={handleEdit}
+          >
+            Edit
+          </Button>
+          <Button
+            style={{ marginLeft: "1rem" }}
+            variant="contained"
+            color="secondary"
+            onClick={handleLogout}
+          >
             Logout
           </Button>
         </div>
@@ -48,14 +80,46 @@ export default function MyAccount() {
           <div className="profile">
             <div className="personal-info">Personal Info</div>
             <div className="data-points">
-              <h2>Name</h2>
-              <h3>{userProfile?.name}</h3>
-              <h2>Grade</h2>
-              <h3>{userProfile?.grade}</h3>
-              <h2>Email</h2>
-              <h3>{userProfile?.email}</h3>
-              <h2>Phone</h2>
-              <h3>{userProfile?.phone}</h3>
+              <div>
+                <h2>Name</h2>
+                <h3>{userProfile?.name}</h3>
+              </div>
+              <div>
+                <h2>Grade</h2>
+                <h3>{userProfile?.grade}</h3>
+              </div>
+              <div>
+                <h2>Email</h2>
+                <h3>{userProfile?.email}</h3>
+              </div>
+              <div>
+                <h2>Phone</h2>
+                <h3>{userProfile?.phone}</h3>
+              </div>
+              <div>
+                <h2>ACT</h2>
+                <h3>{userProfile?.act}</h3>
+              </div>
+              <div>
+                <h2>SAT</h2>
+                <h3>{userProfile?.sat}</h3>
+              </div>
+              <div>
+                <h2>EST</h2>
+                <h3>{userProfile?.est}</h3>
+              </div>
+              <div>
+                <h2>Group Code</h2>
+                <h3>{userProfile?.groupCode}</h3>
+              </div>
+              <div>
+                <h2>Parent Name</h2>
+                <h3>{userProfile?.parentName}</h3>
+              </div>
+              <div>
+                <h2>Parent Phone</h2>
+                <h3>{userProfile?.parentNumber}</h3>
+              </div>
             </div>
             <div className="academic-info">Academic Info</div>
 

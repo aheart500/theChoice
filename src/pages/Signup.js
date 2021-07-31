@@ -64,7 +64,7 @@ const validate = (values, withoutPassword) => {
   return errors;
 };
 
-const Signup = () => {
+const Signup = ({ edit }) => {
   const classes = useStyles();
   const history = useHistory();
   const { Register, userState, UpdateUser } = useContext(UserContext);
@@ -83,12 +83,13 @@ const Signup = () => {
     parentName: "",
     parentNumber: "",
   };
+
   const thirdLogin =
     userState.email && userState.isLoggedIn && ["facebook", "google"].includes(userState.provider)
       ? true
       : false;
 
-  if (thirdLogin) {
+  if (thirdLogin || edit) {
     delete initialValues.password;
     delete initialValues.confirmPassword;
     const valuesToTakeFromState = { ...userState };
@@ -99,11 +100,11 @@ const Signup = () => {
   }
   const formik = useFormik({
     initialValues,
-    validate: (values) => validate(values, thirdLogin),
+    validate: (values) => validate(values, edit ? true : thirdLogin),
     onSubmit: (values) => {
       const valuesToSend = { ...values };
       delete valuesToSend.email;
-      if (!thirdLogin) {
+      if (!thirdLogin & !edit) {
         Register({ username: values.email, ...valuesToSend })
           .then(() => history.replace("/"))
           .catch((e) => console.log(e));
@@ -111,7 +112,7 @@ const Signup = () => {
         delete valuesToSend.password;
         delete valuesToSend.confirmPassword;
         UpdateUser(userState.uid, { ...valuesToSend })
-          .then(() => history.replace("/"))
+          .then(() => history.replace(edit ? "/myaccount" : "/"))
           .catch((e) => console.log(e));
       }
     },
@@ -142,10 +143,20 @@ const Signup = () => {
       <div className="signup-form">
         <h1 style={{ marginTop: "100px" }}>
           Please fill in your information to{" "}
-          {thirdLogin ? "be able to use your account" : "create an account!"}
+          {edit
+            ? "edit your account"
+            : thirdLogin
+            ? "be able to use your account"
+            : "create an account!"}
         </h1>
-        <h2 style={{ marginBottom: "0px" }}>Already have an account?</h2>
-        <Link to="/signin">Click here to log in</Link>
+        {!edit && (
+          <>
+            {" "}
+            <h2 style={{ marginBottom: "0px" }}>Already have an account?</h2>{" "}
+            <Link to="/signin">Click here to log in</Link>
+          </>
+        )}
+
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           <form style={{ width: "80%" }} onSubmit={formik.handleSubmit}>
             <TextField
@@ -212,7 +223,7 @@ const Signup = () => {
               helperText={formik.touched.est && formik.errors.est}
               {...formik.getFieldProps("est")}
             />
-            {!thirdLogin && (
+            {!thirdLogin && !edit && (
               <>
                 <TextField
                   id="password"
@@ -262,32 +273,34 @@ const Signup = () => {
               {...formik.getFieldProps("parentNumber")}
             />
             <Button variant="contained" color="primary" className={classes.input} type="submit">
-              {thirdLogin ? "Update Data" : "Create User"}{" "}
+              {thirdLogin || edit ? "Update Data" : "Create User"}{" "}
             </Button>
           </form>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <Button
-              variant="contained"
-              startIcon={<FacebookIcon />}
-              style={{
-                backgroundColor: "lightblue",
-                margin: "1rem 0",
-              }}
-              onClick={handleSignUpWithFacebook}
-            >
-              Sign Up with facebook
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<GTranslateIcon />}
-              style={{
-                backgroundColor: "lightgreen",
-              }}
-              onClick={handleSignUpWithGoogle}
-            >
-              Sign Up with google
-            </Button>
-          </div>
+          {!edit && (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <Button
+                variant="contained"
+                startIcon={<FacebookIcon />}
+                style={{
+                  backgroundColor: "lightblue",
+                  margin: "1rem 0",
+                }}
+                onClick={handleSignUpWithFacebook}
+              >
+                Sign Up with facebook
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<GTranslateIcon />}
+                style={{
+                  backgroundColor: "lightgreen",
+                }}
+                onClick={handleSignUpWithGoogle}
+              >
+                Sign Up with google
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 

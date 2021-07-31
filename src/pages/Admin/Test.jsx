@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import firebase from "firebase/app";
 import AddQuestion from "./AddQuestion";
 import Button from "@material-ui/core/Button";
@@ -6,7 +6,20 @@ import { AddedQuestionNotif, RemovedQuestionNotif } from "./notifs";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Question from "./Question";
-
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import UserContext from "../../Contexts/User/UserContext";
+const useStyles = makeStyles({
+  table: {
+    maxWidth: 650,
+  },
+});
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
@@ -18,11 +31,13 @@ const TabPanel = (props) => {
 };
 
 const Test = ({ match: { params } }) => {
+  const classes = useStyles();
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
   const testRef = firebase.firestore().collection("tests").doc(params.id);
+  const { userState } = useContext(UserContext);
   useEffect(() => {
     testRef
       .get()
@@ -31,7 +46,8 @@ const Test = ({ match: { params } }) => {
       })
       .catch((e) => console.log(e))
       .finally(() => setLoading(false));
-  }, [params.id, testRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id]);
 
   if (loading) return null;
   if (!test) return <h1>No Test found</h1>;
@@ -63,6 +79,7 @@ const Test = ({ match: { params } }) => {
       );
     });
   };
+  const editor = userState.adminType === "Editor";
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -80,7 +97,34 @@ const Test = ({ match: { params } }) => {
         onClose={() => setDialogOpen(false)}
         withSections={withSections}
       />
-
+      <TableContainer className={classes.table} component={Paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Score</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {test.underTakers.map(({ id, name, score }) => (
+              <TableRow key={id}>
+                <TableCell component="th" scope="row">
+                  <div
+                    style={{
+                      cursor: editor ? "unset" : "pointer",
+                      color: editor ? "black" : "blue",
+                    }}
+                    onClick={() => !editor && window.location.replace(`/student/${id}`)}
+                  >
+                    {name}
+                  </div>
+                </TableCell>
+                <TableCell align="right">{score}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       {!withSections ? (
         questions?.length ? (
           renderQuestions(questions)

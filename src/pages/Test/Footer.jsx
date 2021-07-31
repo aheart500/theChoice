@@ -90,7 +90,7 @@ const Footer = ({ questions, currentQuestion, setCurrentQuestion, flagQuestion, 
   const { items } = usePagination({
     count: questions.length,
     boundaryCount: 4,
-    siblingCount: 10,
+    siblingCount: 30,
     page: currentQuestion,
     onChange: handleChange,
   });

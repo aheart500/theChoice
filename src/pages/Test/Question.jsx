@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -7,6 +7,8 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
 import { FaCalculator, FaBan } from "react-icons/fa";
+import LoadingGIF from "../../images/loading.gif";
+
 const useStyle = makeStyles(() => ({
   questionCard: {
     margin: "1.5rem 3rem",
@@ -23,6 +25,11 @@ const mcqSets = [
 ];
 const Question = ({ question, index, setAnswer, review, testType, currentSection }) => {
   const classes = useStyle();
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const showImage = () => setImageLoaded(true);
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [question?.image]);
   if (!question) return <h1>No Questions Added Yet</h1>;
   const validate = (ans) => {
     return review
@@ -44,7 +51,22 @@ const Question = ({ question, index, setAnswer, review, testType, currentSection
           </div>
         )}
       </h2>
-      <img src={question.image} alt="questionImage" className={classes.image} />
+      <>
+        <img
+          src={LoadingGIF}
+          style={imageLoaded ? { display: "none" } : {}}
+          alt="questionImage"
+          className={classes.image}
+        />
+        <img
+          src={question.image}
+          onLoad={showImage}
+          style={imageLoaded ? {} : { display: "none" }}
+          alt="questionImage"
+          className={classes.image}
+        />
+      </>
+
       <div
         style={{
           display: "flex",
